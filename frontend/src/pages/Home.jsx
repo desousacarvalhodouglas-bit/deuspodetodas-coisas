@@ -58,7 +58,8 @@ const themes = [
   { id: 't3', title: 'É primavera!', image: 'https://images.unsplash.com/photo-1606676539940-12768ce0e762?w=400&h=300&fit=crop', likes: '1.1k', shares: '277' }
 ];
 
-const PostCard = ({ post, onRecommend, onRespond }) => {
+const PostCard = ({ post, onRecommend }) => {
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes);
   const [recommended, setRecommended] = useState(false);
@@ -401,7 +402,7 @@ const Home = () => {
           <div className="lg:col-span-2">
             <div className="space-y-0">
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} onRecommend={handleRecommend} onRespond={handleRespond} />
+                <PostCard key={post.id} post={post} onRecommend={handleRecommend} />
               ))}
             </div>
 
