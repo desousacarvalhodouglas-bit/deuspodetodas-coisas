@@ -71,15 +71,19 @@ const Header = () => {
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
 
-            {/* User Avatar with Dropdown */}
+            {/* User Avatar with Dropdown - Clickable */}
             <div className="relative group">
-              <button className="flex items-center space-x-2">
-                <Avatar className="w-9 h-9 border-2 border-green-400">
+              <button 
+                onClick={() => navigate('/perfil')}
+                className="flex items-center space-x-2 hover:bg-gray-50 rounded-full p-1 pr-3 transition-colors"
+              >
+                <Avatar className="w-9 h-9 border-2 border-green-400 cursor-pointer">
                   <AvatarImage src={user?.avatar} alt={user?.name} />
                   <AvatarFallback className="bg-green-100 text-green-700 text-sm">
                     {user?.name?.charAt(0) || 'U'}
                   </AvatarFallback>
                 </Avatar>
+                <span className="text-sm font-medium text-gray-700 hidden lg:inline">{user?.name}</span>
               </button>
 
               {/* Dropdown Menu */}
