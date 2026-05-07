@@ -169,7 +169,7 @@ const PostCard = ({ post, onRecommend }) => {
           {recommended ? 'Recomendado' : 'Recomendar'}
         </button>
         <button
-          onClick={() => onRespond && onRespond(post)}
+          onClick={() => navigate('/mensagens')}
           data-testid={`respond-btn-${post.id}`}
           className="flex items-center gap-1.5 text-xs text-gray-500 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
         >
