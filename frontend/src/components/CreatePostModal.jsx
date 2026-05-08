@@ -127,7 +127,15 @@ const CreatePostModal = ({ open, onClose }) => {
                 <div key={i} className="relative">
                   {postPhotos[i] ? (
                     <div className="relative w-16 h-16">
-                      <img src={postPhotos[i]} alt={`Foto ${i + 1}`} className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                      <img 
+                        src={postPhotos[i]} 
+                        alt={`Foto ${i + 1}`} 
+                        className="w-16 h-16 object-cover rounded-lg border border-gray-200" 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="64" height="64"%3E%3Crect fill="%23f3f4f6" width="64" height="64"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="10"%3EErro%3C/text%3E%3C/svg%3E';
+                        }}
+                      />
                       <button
                         onClick={() => removePhoto(i)}
                         className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
@@ -163,7 +171,18 @@ const CreatePostModal = ({ open, onClose }) => {
               <div className="mt-2 space-y-2">
                 {postVideos.map((vid, idx) => (
                   <div key={idx} className="relative rounded-lg overflow-hidden">
-                    <video src={vid} controls playsInline className="w-full rounded-lg object-cover" style={{ maxHeight: '150px' }} />
+                    <video 
+                      src={vid} 
+                      controls 
+                      playsInline 
+                      className="w-full rounded-lg object-cover" 
+                      style={{ maxHeight: '150px' }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        const parent = e.target.parentElement;
+                        parent.innerHTML = '<div class="w-full h-32 bg-gray-100 flex items-center justify-center text-xs text-gray-500 rounded-lg">Vídeo não suportado</div>';
+                      }}
+                    />
                     <button onClick={() => removeVideo(idx)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
                       <X className="w-3 h-3" />
                     </button>

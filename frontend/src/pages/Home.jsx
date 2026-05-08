@@ -103,6 +103,11 @@ const PostCard = ({ post, onRecommend }) => {
                   src={post.images[0]}
                   alt="Foto do pedido"
                   className="w-full max-h-[400px] object-contain bg-gray-50"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="Arial" font-size="14"%3EImagem não disponível%3C/text%3E%3C/svg%3E';
+                    e.target.style.objectFit = 'contain';
+                  }}
                 />
               ) : (
                 <div className="grid grid-cols-2 gap-2 px-3">
@@ -111,7 +116,12 @@ const PostCard = ({ post, onRecommend }) => {
                       key={idx}
                       src={img}
                       alt={`Foto ${idx + 1}`}
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-48 object-cover rounded-lg bg-gray-50"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23f3f4f6" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12"%3EImagem%3C/text%3E%3C/svg%3E';
+                        e.target.style.objectFit = 'contain';
+                      }}
                     />
                   ))}
                 </div>
