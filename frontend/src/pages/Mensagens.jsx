@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Input } from '../components/ui/input';
@@ -46,6 +47,8 @@ const mockConversations = [
 
 const Mensagens = () => {
   const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [selectedConvId, setSelectedConvId] = useState(null);
   const [message, setMessage] = useState('');
   const [filter, setFilter] = useState('todas');
@@ -64,6 +67,48 @@ const Mensagens = () => {
   const fileInputRef = useRef(null);
 
   const conv = conversations.find(c => c.id === selectedConvId);
+
+  // Process incoming navigation state (from "Responder" button on Home)
+  useEffect(() => {
+    const target = location.state?.targetUser;
+    const initialMsg = location.state?.initialMessage;
+    if (!target) return;
+
+    // Try to find an existing conversation with this user (by id or name)
+    const matchKey = target.id || target.name;
+    let existing = conversations.find(c =>
+      (target.id && c.authorId === target.id) || c.name === target.name
+    );
+
+    if (existing) {
+      setSelectedConvId(existing.id);
+    } else {
+      // Create a new conversation entry for this author
+      const newConv = {
+        id: `new-${matchKey}-${Date.now()}`,
+        authorId: target.id,
+        name: target.name || 'Usuário',
+        avatar: target.avatar || '',
+        rating: 0,
+        reviewCount: 0,
+        date: new Date().toLocaleDateString('pt-BR'),
+        service: target.service || 'Pedido público',
+        lastMessage: '',
+        unread: false,
+        status: 'active',
+        messages: []
+      };
+      setConversations(prev => [newConv, ...prev]);
+      setSelectedConvId(newConv.id);
+    }
+
+    if (initialMsg) {
+      setMessage(initialMsg);
+    }
+
+    // Clear navigation state to avoid re-triggering on re-renders
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

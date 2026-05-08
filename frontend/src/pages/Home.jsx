@@ -179,7 +179,17 @@ const PostCard = ({ post, onRecommend }) => {
           {recommended ? 'Recomendado' : 'Recomendar'}
         </button>
         <button
-          onClick={() => navigate('/mensagens')}
+          onClick={() => navigate('/mensagens', {
+            state: {
+              targetUser: {
+                id: post.userId,
+                name: post.userName,
+                avatar: post.userAvatar,
+                service: post.description?.slice(0, 60) || 'Pedido público'
+              },
+              initialMessage: 'eu tenho interesse no trabalho'
+            }
+          })}
           data-testid={`respond-btn-${post.id}`}
           className="flex items-center gap-1.5 text-xs text-gray-500 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
         >
@@ -221,6 +231,7 @@ const Home = () => {
       // Convert API response to component format
       const formattedPosts = res.data.map(post => ({
         id: post.id,
+        userId: post.user_id,
         userName: post.user_name,
         userAvatar: post.user_avatar,
         time: getTimeAgo(post.created_at),
@@ -306,6 +317,7 @@ const Home = () => {
       // Add new post to the beginning of the list
       const newPost = {
         id: res.data.id,
+        userId: res.data.user_id,
         userName: res.data.user_name,
         userAvatar: res.data.user_avatar,
         time: 'agora mesmo',
