@@ -23,7 +23,7 @@ def get_db():
 @router.get("", response_model=List[PostResponse])
 async def get_posts(
     skip: int = Query(0, ge=0),
-    limit: int = Query(50, le=100),
+    limit: int = Query(20, le=100),
     user_id: Optional[str] = Depends(get_current_user_id)
 ):
     db = get_db()

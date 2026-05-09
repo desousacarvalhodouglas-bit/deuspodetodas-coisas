@@ -9,6 +9,7 @@ import { Heart, Share2, MessageSquare, MapPin, X, Camera, Globe, ChevronRight, U
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
+import { compressImage, isInvalidImageUrl } from '../lib/imageUtils';
 
 const initialPosts = [
   {
@@ -228,7 +229,7 @@ const Home = () => {
     try {
       setLoading(true);
       const res = await api.get('/posts');
-      // Convert API response to component format
+      // Convert API response to component format and filter stale blob: URLs
       const formattedPosts = res.data.map(post => ({
         id: post.id,
         userId: post.user_id,
@@ -238,8 +239,8 @@ const Home = () => {
         description: post.description,
         location: post.location,
         budget: post.budget,
-        images: post.images || [],
-        videos: post.videos || [],
+        images: (post.images || []).filter(u => !isInvalidImageUrl(u)),
+        videos: (post.videos || []).filter(u => !isInvalidImageUrl(u)),
         likes: post.likes,
         recommends: post.recommends,
         responses: post.responses
@@ -265,15 +266,20 @@ const Home = () => {
     return `postado às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
   };
 
-  const handlePhotoUpload = (e, index) => {
+  const handlePhotoUpload = async (e, index) => {
     const file = e.target.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setPostPhotos(prev => {
-      const updated = [...prev];
-      updated[index] = url;
-      return updated;
-    });
+    try {
+      const dataUrl = await compressImage(file, 1024, 0.7);
+      setPostPhotos(prev => {
+        const updated = [...prev];
+        updated[index] = dataUrl;
+        return updated;
+      });
+    } catch (err) {
+      console.error('Erro ao processar imagem:', err);
+      alert('Erro ao processar imagem. Tente outra foto.');
+    }
   };
 
   const removePhoto = (index) => {
@@ -284,15 +290,22 @@ const Home = () => {
     });
   };
 
-  const handleCameraCapture = (e) => {
+  const handleCameraCapture = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setPostPhotos(prev => [...prev, URL.createObjectURL(file)]);
+    try {
+      const dataUrl = await compressImage(file, 1024, 0.7);
+      setPostPhotos(prev => [...prev, dataUrl]);
+    } catch (err) {
+      console.error('Erro ao processar foto:', err);
+    }
   };
 
   const handleVideoUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    // Videos are kept as object URLs only for in-session preview;
+    // we will not upload them as data URLs (too large). Strip on publish.
     setPostVideos(prev => [...prev, URL.createObjectURL(file)]);
   };
 
@@ -308,8 +321,8 @@ const Home = () => {
         description: postText,
         location: postAddress,
         budget: 'A combinar',
-        images: postPhotos.filter(Boolean),
-        videos: postVideos.filter(Boolean)
+        images: postPhotos.filter(Boolean).filter(u => !isInvalidImageUrl(u)),
+        videos: [] // Videos via blob: URLs cannot be persisted; skip until proper upload exists
       };
       
       const res = await api.post('/posts', postData);

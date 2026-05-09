@@ -6,6 +6,7 @@ import { Camera, X, MapPin, Loader2, Video } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
+import { compressImage, isInvalidImageUrl } from '../lib/imageUtils';
 
 const CreatePostModal = ({ open, onClose }) => {
   const { user } = useAuth();
@@ -18,16 +19,17 @@ const CreatePostModal = ({ open, onClose }) => {
   const fileInputRefs = useRef([]);
   const videoInputRef = useRef(null);
 
-  const handlePhotoUpload = (e, index) => {
+  const handlePhotoUpload = async (e, index) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const newPhotos = [...postPhotos];
-        newPhotos[index] = reader.result;
-        setPostPhotos(newPhotos);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    try {
+      const dataUrl = await compressImage(file, 1024, 0.7);
+      const newPhotos = [...postPhotos];
+      newPhotos[index] = dataUrl;
+      setPostPhotos(newPhotos);
+    } catch (err) {
+      console.error('Erro ao processar imagem:', err);
+      alert('Erro ao processar imagem. Tente outra foto.');
     }
   };
 
@@ -64,8 +66,8 @@ const CreatePostModal = ({ open, onClose }) => {
         description: postText,
         location: postAddress,
         budget: 'A combinar',
-        images: postPhotos.filter(Boolean),
-        videos: postVideos.filter(Boolean)
+        images: postPhotos.filter(Boolean).filter(u => !isInvalidImageUrl(u)),
+        videos: postVideos.filter(Boolean).filter(u => !isInvalidImageUrl(u))
       };
       
       await api.post('/posts', postData);
