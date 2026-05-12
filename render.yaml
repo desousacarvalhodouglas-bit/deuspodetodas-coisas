@@ -43,7 +43,7 @@ services:
     plan: free
     region: oregon
     rootDir: frontend
-    buildCommand: yarn install --frozen-lockfile && yarn build
+    buildCommand: yarn install --frozen-lockfile --network-timeout 600000 && yarn build
     staticPublishPath: ./build
     autoDeploy: true
     envVars:
