@@ -103,6 +103,8 @@ const PostCard = ({ post, onRecommend }) => {
                 <img
                   src={post.images[0]}
                   alt="Foto do pedido"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full max-h-[400px] object-contain bg-gray-50"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -117,6 +119,8 @@ const PostCard = ({ post, onRecommend }) => {
                       key={idx}
                       src={img}
                       alt={`Foto ${idx + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-48 object-cover rounded-lg bg-gray-50"
                       onError={(e) => {
                         e.target.onerror = null;
@@ -139,6 +143,7 @@ const PostCard = ({ post, onRecommend }) => {
                   src={vid}
                   controls
                   playsInline
+                  preload="none"
                   className="w-full rounded-lg object-cover"
                   style={{ maxHeight: '400px' }}
                 />
