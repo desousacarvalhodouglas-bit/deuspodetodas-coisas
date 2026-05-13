@@ -231,20 +231,20 @@ const NewHome = () => {
       <header className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold">
-              S
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold">
+              J
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold">
-                <span className="text-pink-500">servi</span>
-                <span className="text-green-500">vizinhos</span>
+                <span className="text-green-500">Jataí</span>
+                <span className="text-orange-500"> Região</span>
               </span>
-              <span className="text-xs text-gray-500 uppercase">Facilitador de Projetos</span>
+              <span className="text-xs text-gray-500 uppercase">Facilitador de Trabalho</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
             <div className="hidden sm:flex items-center space-x-2 text-sm">
-              {['PT', 'FR', 'EN', 'ES'].map((lang) => (
+              {['PT', 'EN', 'ES'].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => setLanguage(lang)}
@@ -318,7 +318,7 @@ const NewHome = () => {
           </div>
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <img src="https://images.unsplash.com/photo-1555955207-cf6fba0f1f57?w=1200&h=800&fit=crop&q=90" alt="Vizinhos ajudando em serviços" className="w-full h-[500px] object-cover" />
+              <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjB3b3JrZXJzfGVufDB8fHx8MTc3NTcwMDMxOHww&ixlib=rb-4.1.0&q=85" alt="Profissionais trabalhando em Jataí" className="w-full h-[500px] object-cover" />
             </div>
           </div>
         </div>
@@ -328,7 +328,7 @@ const NewHome = () => {
       <div className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Por que escolher o ServiVizinhos em Goiás?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Por que escolher Jataí Região Trabalho em Goiás?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Somos a ponte entre quem precisa de serviços e profissionais qualificados em todo estado de Goiás
             </p>
@@ -361,7 +361,7 @@ const NewHome = () => {
               </div>
               <h3 className="font-bold text-lg mb-2">Comunidade Ativa</h3>
               <p className="text-gray-600 text-sm">
-                Milhares de goianos já confiam no ServiVizinhos para encontrar serviços e oportunidades
+                Milhares de goianos já confiam em Jataí Região Trabalho para encontrar serviços e oportunidades
               </p>
             </div>
           </div>
@@ -415,7 +415,7 @@ const NewHome = () => {
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
           <div className="mb-4 md:mb-0">
             <p className="text-white text-lg font-medium mb-1">
-              Junte-se aos milhares de goianos no ServiVizinhos
+              Junte-se aos milhares de goianos em Jataí Região Trabalho
             </p>
             <p className="text-green-50 text-sm">
               {userLocation ? `📍 Sua localização: ${userLocation}` : 'Encontre serviços e empregos perto de você'}

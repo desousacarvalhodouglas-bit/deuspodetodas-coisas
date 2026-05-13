@@ -30,15 +30,15 @@ const Header = () => {
           <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/feed')}>
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold">
-              S
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold">
+              J
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold leading-tight">
-                <span className="text-pink-500">servi</span>
-                <span className="text-green-500">vizinhos</span>
+                <span className="text-green-500">Jataí</span>
+                <span className="text-orange-500"> Região</span>
               </span>
-              <span className="text-[10px] text-gray-500 uppercase leading-tight">Facilitador de Projetos</span>
+              <span className="text-[10px] text-gray-500 uppercase leading-tight">Facilitador de Trabalho</span>
             </div>
           </div>
 
@@ -133,13 +133,13 @@ const Header = () => {
           {/* Logo and Location */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/feed')}>
-              <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                S
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                J
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="text-base font-bold">
-                  <span className="text-pink-500">servi</span>
-                  <span className="text-green-500">vizinhos</span>
+                  <span className="text-green-500">Jataí</span>
+                  <span className="text-orange-500"> Região</span>
                 </span>
               </div>
             </div>
