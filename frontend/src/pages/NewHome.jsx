@@ -193,7 +193,8 @@ const NewHome = () => {
       setIsLoading(true);
       setError('');
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/reset-password?email=${forgotPasswordEmail}&new_password=${newPassword}`, {
+        const url = `${process.env.REACT_APP_BACKEND_URL}/api/auth/reset-password?email=${encodeURIComponent(forgotPasswordEmail)}&new_password=${encodeURIComponent(newPassword)}`;
+        const response = await fetch(url, {
           method: 'POST',
         });
         
