@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from models import PostCreate, PostResponse, InteractionCreate
-from auth_utils import get_current_user_id
+from auth_utils import get_current_user_id, get_optional_user_id
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -24,7 +24,7 @@ def get_db():
 async def get_posts(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, le=100),
-    user_id: Optional[str] = Depends(get_current_user_id)
+    user_id: Optional[str] = Depends(get_optional_user_id)
 ):
     db = get_db()
     posts = await db.posts.find().sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
@@ -134,7 +134,7 @@ async def create_post(
 @router.get("/{post_id}", response_model=PostResponse)
 async def get_post(
     post_id: str,
-    user_id: Optional[str] = Depends(get_current_user_id)
+    user_id: Optional[str] = Depends(get_optional_user_id)
 ):
     db = get_db()
     post = await db.posts.find_one({"_id": ObjectId(post_id)})
@@ -321,7 +321,7 @@ async def respond_to_post(
 @router.get("/{post_id}/responses")
 async def get_responses(
     post_id: str,
-    user_id: Optional[str] = Depends(get_current_user_id)
+    user_id: Optional[str] = Depends(get_optional_user_id)
 ):
     db = get_db()
     responses = await db.interactions.find({
