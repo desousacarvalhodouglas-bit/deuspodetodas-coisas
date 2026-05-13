@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import { compressImage, isInvalidImageUrl } from '../lib/imageUtils';
 
-const CreatePostModal = ({ open, onClose }) => {
+const CreatePostModal = ({ open, onClose, onPostCreated }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [postText, setPostText] = useState('');
@@ -70,17 +70,25 @@ const CreatePostModal = ({ open, onClose }) => {
         videos: postVideos.filter(Boolean).filter(u => !isInvalidImageUrl(u))
       };
       
-      await api.post('/posts', postData);
-      
+      const res = await api.post('/posts', postData);
+
       // Reset form
       setPostText('');
       setPostPhotos([]);
       setPostVideos([]);
       setPostAddress(user?.location || 'Jataí, Goiás');
-      
-      // Close modal and refresh
+
+      // Notify parent and any listeners (the feed) so the new post is prepended
+      if (onPostCreated) {
+        onPostCreated(res.data);
+      }
+      window.dispatchEvent(new CustomEvent('post-created', { detail: res.data }));
+
+      // Close modal and ensure user lands on the feed where the new post appears
       onClose();
-      window.location.reload();
+      if (window.location.pathname !== '/feed') {
+        navigate('/feed');
+      }
     } catch (err) {
       console.error('Error creating post:', err);
       

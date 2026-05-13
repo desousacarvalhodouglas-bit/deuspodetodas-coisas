@@ -225,6 +225,32 @@ const Home = () => {
     fetchPosts();
   }, []);
 
+  // Listen for posts created from the mobile FAB modal (BottomNav) and prepend them
+  useEffect(() => {
+    const handleNewPost = (e) => {
+      const post = e.detail;
+      if (!post) return;
+      const formatted = {
+        id: post.id,
+        userId: post.user_id,
+        userName: post.user_name,
+        userAvatar: post.user_avatar,
+        time: 'agora mesmo',
+        description: post.description,
+        location: post.location,
+        budget: post.budget,
+        images: (post.images || []).filter(u => !isInvalidImageUrl(u)),
+        videos: (post.videos || []).filter(u => !isInvalidImageUrl(u)),
+        likes: post.likes,
+        recommends: post.recommends,
+        responses: post.responses
+      };
+      setPosts(prev => [formatted, ...prev]);
+    };
+    window.addEventListener('post-created', handleNewPost);
+    return () => window.removeEventListener('post-created', handleNewPost);
+  }, []);
+
   const fetchPosts = async () => {
     try {
       setLoading(true);
