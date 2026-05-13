@@ -42,7 +42,7 @@ const Perfil = () => {
         </div>
 
         {/* Profile Info Card */}
-        <Card className="pt-24 sm:pt-20 pb-6 px-4 sm:px-8">
+        <Card className="pt-32 sm:pt-20 pb-6 px-4 sm:px-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
             <div className="min-w-0 flex-1">
               <h1 className="text-xl sm:text-3xl font-bold break-words mb-1" data-testid="profile-name">
