@@ -25,55 +25,54 @@ const Perfil = () => {
     <div className="min-h-screen bg-[#F5F8FA]">
       <Header />
       
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
         {/* Cover Photo */}
         <div className="relative mb-[-60px]">
-          <div className="h-64 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-t-xl"></div>
-          
+          <div className="h-40 sm:h-64 bg-gradient-to-r from-orange-400 via-green-400 to-emerald-500 rounded-t-xl"></div>
+
           {/* Avatar */}
-          <div className="absolute bottom-[-60px] left-8">
-            <Avatar className="w-32 h-32 border-4 border-white shadow-lg">
+          <div className="absolute bottom-[-60px] left-4 sm:left-8">
+            <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-white shadow-lg">
               <AvatarImage src={user?.avatar} alt={user?.name} />
-              <AvatarFallback className="bg-gray-300 text-4xl">
+              <AvatarFallback className="bg-gray-300 text-2xl sm:text-4xl">
                 {user?.name?.charAt(0) || 'U'}
               </AvatarFallback>
             </Avatar>
           </div>
-          
-          {/* Account Type Badge */}
-          <div className="absolute bottom-[-70px] left-[170px]">
-            <Badge className="bg-gray-600 text-white px-3 py-1">
-              Particular
-            </Badge>
-          </div>
         </div>
 
         {/* Profile Info Card */}
-        <Card className="pt-20 pb-6 px-8">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">{user?.name || 'Usuário'}</h1>
-              <div className="flex items-center text-gray-600 mb-3">
-                <MapPin className="w-4 h-4 mr-1" />
-                <span>{user?.location || 'Localização não informada'}</span>
+        <Card className="pt-24 sm:pt-20 pb-6 px-4 sm:px-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-3xl font-bold break-words mb-1" data-testid="profile-name">
+                {user?.name || 'Usuário'}
+              </h1>
+              <div className="mb-2">
+                <Badge className="bg-gray-600 text-white px-2 py-0.5 text-xs">Particular</Badge>
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+                <span className="truncate">{user?.location || 'Localização não informada'}</span>
               </div>
             </div>
 
-            {/* Logout Button - Mobile and Desktop */}
-            <Button 
-              onClick={handleLogout}
-              variant="destructive"
-              size="sm"
-              className="ml-2"
-            >
-              <LogOut className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Sair</span>
-            </Button>
+            <div className="flex items-center gap-2 self-start">
+              <Button
+                onClick={handleLogout}
+                variant="destructive"
+                size="sm"
+                data-testid="logout-btn"
+              >
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Sair</span>
+              </Button>
 
-            <Button variant="outline" className="text-red-500 border-red-200 hover:bg-red-50">
-              <Flag className="w-4 h-4 mr-2" />
-              Denunciar perfil
-            </Button>
+              <Button variant="outline" size="sm" className="text-red-500 border-red-200 hover:bg-red-50">
+                <Flag className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Denunciar</span>
+              </Button>
+            </div>
           </div>
 
           {/* Tabs */}

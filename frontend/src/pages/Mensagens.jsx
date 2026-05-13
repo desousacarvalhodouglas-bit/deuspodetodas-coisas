@@ -450,9 +450,9 @@ const Mensagens = () => {
             )}
           </div>
 
-          {/* RIGHT - Profile Sidebar */}
+          {/* RIGHT - Profile Sidebar (desktop only) */}
           {conv && (
-            <div className="w-72 border-l border-gray-200 flex flex-col p-4 overflow-y-auto" data-testid="profile-sidebar">
+            <div className="hidden lg:flex w-72 border-l border-gray-200 flex-col p-4 overflow-y-auto" data-testid="profile-sidebar">
               <div className="text-center mb-4">
                 <Avatar className="w-16 h-16 mx-auto mb-2">
                   <AvatarImage src={conv.avatar} />
