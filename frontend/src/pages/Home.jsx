@@ -225,9 +225,22 @@ const Home = () => {
   const videoInputRef = useRef(null);
   const [postVideos, setPostVideos] = useState([]);
 
-  // Fetch posts from API
+  // Fetch posts from API on mount
   useEffect(() => {
     fetchPosts();
+  }, []);
+
+  // Auto-refresh feed every 15s so new posts from other users appear without refresh.
+  // Also re-fetches when the tab becomes visible again.
+  useEffect(() => {
+    const refresh = () => fetchPosts({ silent: true });
+    const interval = setInterval(refresh, 15000);
+    const onVisible = () => { if (document.visibilityState === 'visible') refresh(); };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, []);
 
   // Listen for posts created from the mobile FAB modal (BottomNav) and prepend them
@@ -250,15 +263,19 @@ const Home = () => {
         recommends: post.recommends,
         responses: post.responses
       };
-      setPosts(prev => [formatted, ...prev]);
+      setPosts(prev => {
+        // Avoid duplicates if the polling already brought this one in
+        if (prev.some(p => p.id === formatted.id)) return prev;
+        return [formatted, ...prev];
+      });
     };
     window.addEventListener('post-created', handleNewPost);
     return () => window.removeEventListener('post-created', handleNewPost);
   }, []);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async ({ silent = false } = {}) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const res = await api.get('/posts');
       // Convert API response to component format and filter stale blob: URLs
       const formattedPosts = res.data.map(post => ({
@@ -279,10 +296,9 @@ const Home = () => {
       setPosts(formattedPosts);
     } catch (err) {
       console.error('Error fetching posts:', err);
-      // Fallback to initial posts if API fails
-      setPosts(initialPosts);
+      if (!silent) setPosts(initialPosts);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -466,6 +482,24 @@ const Home = () => {
 
           {/* Left Column - Feed */}
           <div className="lg:col-span-2">
+            {/* Refresh button + status */}
+            <div className="flex items-center justify-between px-2 sm:px-0 mb-2">
+              <p className="text-xs text-gray-500" data-testid="feed-status">
+                {loading ? 'Atualizando…' : `${posts.length} ${posts.length === 1 ? 'pedido' : 'pedidos'}`}
+              </p>
+              <button
+                onClick={() => fetchPosts({ silent: true })}
+                disabled={loading}
+                data-testid="refresh-feed-btn"
+                className="flex items-center gap-1.5 text-xs text-green-600 hover:text-green-700 disabled:opacity-50 px-3 py-1.5 rounded-full hover:bg-green-50 transition-colors"
+              >
+                <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Atualizar
+              </button>
+            </div>
+
             <div className="space-y-0">
               {posts.map((post) => (
                 <PostCard key={post.id} post={post} onRecommend={handleRecommend} />
